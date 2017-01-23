@@ -30,7 +30,7 @@ library(tools)
 
 NAME <- 'biiko'  # 'balou', 'christian'
 STORE_ID <- 'np94z'
-INIT_MSG <- 'Do not rm(PID) from your global environment!\nand\nPlease run chatrKill() before exiting your R session!\nNow 2 the fun stuff..\nType chatr("ur_msg") in the console to send a message to your peers.'
+INIT_MSG <- 'Do not rm(PID, NAME, STORE_ID) from your global environment!\nand\nPlease run chatrKill() before exiting your R session!'
 
 message('Run chatrInit() to start chatting with your peers.')
 
@@ -41,7 +41,7 @@ chatrInit <- function(name=NAME, store_id=STORE_ID, imsg=INIT_MSG) {
   cbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
   cbase$hash[[tolower(name)]] <- T  # login
   if ((as.integer(Sys.time()) - as.integer(names(cbase$msgs)[length(cbase$msgs)])) > 86400) {  # 24h
-    res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=list(hash=cbase$hash, msgs=list()), encode="json")
+    res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=list(hash=cbase$hash, msgs=list()), encode='json')
     if(httr::status_code(res)==200) message('Cleared old chat history and logged in.')
   } else {
     res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=cbase, encode="json")
@@ -49,7 +49,7 @@ chatrInit <- function(name=NAME, store_id=STORE_ID, imsg=INIT_MSG) {
   }
   PID <<- sys::exec_background('Rscript', 'chatr_background.R', T, T)
   message(paste0('Started background R process with PID ', PID))
-  message(paste('Online:', paste0(names(which(unlist(cbase$hash))), collapse=', '), '\nRun chatr("ur_msg") 2 chat.'))
+  message(paste('Online:', paste0(names(which(unlist(cbase$hash))), collapse=', '), '\nRun chatr("ur msg") 2 chat.'))
 }
 
 # Kills background R process and logs out
@@ -58,7 +58,7 @@ chatrKill <- function(pid=PID, name=NAME, store_id=STORE_ID) {
   message('Successfully killed background R process.')
   xbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
   xbase$hash[[tolower(name)]] <- F  # logout
-  res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=xbase, encode="json")
+  res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=xbase, encode='json')
   if(httr::status_code(res)==200) message('Logged out.')
 }
 
@@ -66,8 +66,8 @@ chatrKill <- function(pid=PID, name=NAME, store_id=STORE_ID) {
 chatr <- function(msg, name=NAME, store_id=STORE_ID) {
   stopifnot(typeof(msg)=='character', nchar(msg)>0)
   pbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))  # prep 4 safer put
-  pbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz = "UTC", "%d %b %H:%M"),
-                                                         "UTC |", name, ':', msg)  # including timestamp
-  res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=pbase, encode="json")
+  pbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz = 'UTC', '%d %b %H:%M'),
+                                                              'UTC |', name, ':', msg)  # including timestamp
+  res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=pbase, encode='json')
   return(httr::status_code(res))
 }
