@@ -10,7 +10,7 @@ bgGET <- function(store_id=STORE_ID) {
   chatrpast <- chatrbase
   chatrbase <<- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))$msgs
   new_msgs <- setdiff(chatrbase, chatrpast)
-  lapply(new_msgs, print)
+  lapply(new_msgs, cat, sep='\n')
 }
 
 # cron loop
