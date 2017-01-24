@@ -29,7 +29,7 @@ chatrInit <- function(name=NAME, store_id=STORE_ID) {
   cbase$hash[[toTitleCase(name)]] <- T  # login
   cbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz = 'UTC', '%d %b %H:%M'),
                                                               'UTC |', toTitleCase(name), 'logged in.')
-  if ((as.integer(Sys.time()) - as.integer(names(cbase$msgs)[length(cbase$msgs)])) > 21600) {  # 6h
+  if ((as.integer(Sys.time())-as.integer(names(cbase$msgs)[length(cbase$msgs)]))>21600) {  # 6h
     cbase$msgs <- cbase$msgs[length(cbase$msgs)]
     res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=cbase, encode='json')
     if(httr::status_code(res)==200) message('Cleared old chat history and logged in.')
