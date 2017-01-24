@@ -23,7 +23,7 @@ message('Run chatrInit() 2 start chatting with your peers.')
 
 # Initializes a chat
 chatrInit <- function(name=NAME, store_id=STORE_ID) {
-  stopifnot(nchar(name)>0, nchar(store_id)>0)
+  stopifnot(nchar(name)>0, nchar(store_id)>0, 'chatr.R' %in% list.files(), 'chatr_background.R' %in% list.files())
   message('Do not rm(PID, NAME, STORE_ID, chatr...) from your global environment!\nand\nPlease run chatrKill() before exiting your R session!')
   cbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
   cbase$hash[[toTitleCase(name)]] <- T  # login
