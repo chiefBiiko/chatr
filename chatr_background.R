@@ -15,6 +15,6 @@ bgGET <- function(store_id=STORE_ID) {
 
 # cron loop
 while (T) {
-  Sys.sleep(15)
+  Sys.sleep(10)
   bgGET()
 }
