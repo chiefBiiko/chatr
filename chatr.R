@@ -23,7 +23,7 @@ message('Run chatrInit() 2 start chatting with your peers.')
 
 # Initializes a chat
 chatrInit <- function(name=NAME, store_id=STORE_ID) {
-  stopifnot(nchar(name)>0, nchar(store_id)>0, 'chatr.R' %in% list.files(), 'chatr_background.R' %in% list.files())
+  stopifnot(nchar(name)>0, nchar(store_id)>0, 'chatr.R'%in%list.files(), 'chatr_background.R'%in%list.files())
   message('Do not rm(PID, NAME, STORE_ID, chatr...) from your global environment!\nand\nPlease run chatrKill() before exiting your R session!')
   cbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
   cbase$hash[[toTitleCase(name)]] <- T  # login
@@ -54,7 +54,7 @@ chatrKill <- function(pid=PID, name=NAME, store_id=STORE_ID) {
 # Prepares and launches a PUT operation aka 'the chatting function'
 chatr <- function(msg, name=NAME, store_id=STORE_ID) {
   stopifnot(typeof(msg)=='character', nchar(msg)>0)
-  pbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))  # prep 4 safer put
+  pbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
   pbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz = 'UTC', '%d %b %H:%M'),
                                                               'UTC |', toTitleCase(name), ':', msg)
   res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=pbase, encode='json')
