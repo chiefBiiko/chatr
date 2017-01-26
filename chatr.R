@@ -1,4 +1,9 @@
 # chatr - console 2 console chat in R
+
+lapply(list('sys', 'jsonlite', 'httr', 'tools'), function(x) {
+  if (!x%in%installed.packages()) install.packages(x)
+})
+
 library(sys)
 library(jsonlite)
 library(httr)
@@ -27,7 +32,7 @@ chatrInit <- function(name=NAME, store_id=STORE_ID) {
   message('Do not rm(PID, NAME, STORE_ID, chatr...) from your global environment!\nand\nPlease run chatrKill() before exiting your R session!')
   cbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
   cbase$hash[[toTitleCase(name)]] <- T  # login
-  cbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz = 'UTC', '%d %b %H:%M'),
+  cbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz='UTC', '%d %b %H:%M'),
                                                               'UTC |', toTitleCase(name), 'logged in.')
   if ((as.integer(Sys.time())-as.integer(names(cbase$msgs)[length(cbase$msgs)-1]))>21600) {  # 6h
     cbase$msgs <- cbase$msgs[length(cbase$msgs)]
@@ -45,7 +50,7 @@ chatrKill <- function(pid=PID, name=NAME, store_id=STORE_ID) {
   message('Successfully killed background R process.')
   xbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
   xbase$hash[[toTitleCase(name)]] <- F  # logout
-  xbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz = 'UTC', '%d %b %H:%M'),
+  xbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz='UTC', '%d %b %H:%M'),
                                                               'UTC |', toTitleCase(name), 'logged out.')
   res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=xbase, encode='json')
   if (httr::status_code(res)==200) message('Logged out.')
@@ -55,7 +60,7 @@ chatrKill <- function(pid=PID, name=NAME, store_id=STORE_ID) {
 chatr <- function(msg, name=NAME, store_id=STORE_ID) {
   stopifnot(typeof(msg)=='character', nchar(msg)>0)
   pbase <- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))
-  pbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz = 'UTC', '%d %b %H:%M'),
+  pbase$msgs[[as.character(as.integer(Sys.time()))]] <- paste(format(Sys.time(), tz='UTC', '%d %b %H:%M'),
                                                               'UTC |', toTitleCase(name), ':', msg)
   res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), body=pbase, encode='json')
   if (httr::status_code(res)!=200) message(httr::status_code(res))
