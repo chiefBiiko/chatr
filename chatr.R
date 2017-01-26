@@ -1,14 +1,5 @@
 # chatr - console 2 console chat in R
-
-lapply(list('sys', 'jsonlite', 'httr', 'tools'), function(x) {
-  if (!x%in%installed.packages()) install.packages(x)
-})
-
-library(sys)
-library(jsonlite)
-library(httr)
-library(tools)
-
+#
 # Note:
 #   If any stranger wants 2 run this, get ur own STORE_ID via a POST 2 http://api.myjson.com/bins.
 #
@@ -23,6 +14,15 @@ library(tools)
 
 NAME <- 'Biiko'  # 'Balou', 'Christian'
 STORE_ID <- 'np94z'
+
+lapply(list('sys', 'jsonlite', 'httr', 'tools'), function(x) {
+  if (!x%in%installed.packages()) install.packages(x)
+})
+
+library(sys)
+library(jsonlite)
+library(httr)
+library(tools)
 
 message('Run chatrInit() 2 start chatting with your peers.')
 
