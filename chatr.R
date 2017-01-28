@@ -12,17 +12,17 @@
 #   chatr('hi')  # send a msg 2 ur peers via the remote store
 #   chatrKill()  # stop background R process before exiting ur R session!
 
-NAME <- 'Biiko'  # 'Balou', 'Christian'
-STORE_ID <- 'np94z'
-
-lapply(list('sys', 'jsonlite', 'httr', 'tools'), function(x) {
-  if (!x%in%installed.packages()) install.packages(x)
+lapply(list('devtools', 'sys', 'jsonlite', 'httr', 'tools'), function(p) {
+  if (!p%in%installed.packages()) install.packages(p)
 })
 
 library(sys)
 library(jsonlite)
 library(httr)
 library(tools)
+
+NAME <- 'Biiko'  # 'Balou', 'Christian'
+STORE_ID <- rawToChar(packBits(as.raw(jsonlite::fromJSON('419.json')), 'raw'))
 
 message('Run chatrInit() 2 start chatting with your peers.')
 

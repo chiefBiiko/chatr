@@ -9,11 +9,13 @@ if (paste0(Sys.info()[1:2], collapse='')=='Windows7' && !file.exists('notifu/not
   unlink(temp)
 }
 if (!'notifier'%in%installed.packages()) source('https://install-github.me/gaborcsardi/notifier')
+if (!'beepr'%in%installed.packages()) devtools::install_github('rasmusab/beepr') 
 
 library(jsonlite)
 library(notifier)
+library(beepr)
 
-STORE_ID <- 'np94z'
+STORE_ID <- rawToChar(packBits(as.raw(jsonlite::fromJSON('419.json')), 'raw'))
 chatrbase <- list()
 
 # Gets a remote store and prints new messages to stdout pipe
@@ -23,7 +25,10 @@ bgGET <- function(store_id=STORE_ID) {
   chatrbase <<- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))$msgs
   new_msgs <- setdiff(chatrbase, chatrpast)
   lapply(new_msgs, cat, sep='\n')
-  if (length(new_msgs)>0) try(notifier::notify(title='chatr', msg='New message'), T)
+  if (length(new_msgs)>0) {
+    try(notifier::notify(title='chatr', msg='New message'), T)
+    try(beepr::beep(sample(c(2, 10), 1)), T)
+  }
 }
 
 # cron loop
