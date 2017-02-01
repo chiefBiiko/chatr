@@ -1,7 +1,7 @@
 # chatr - console 2 console chat in R
 #
 # Note:
-#   If any stranger wants 2 run this, get ur own STORE_ID via a POST 2 http://api.myjson.com/bins.
+#   If u r a stranger, get ur own STORE_ID via a POST 2 http://api.myjson.com/bins.
 #
 # Usage:
 #   Get this repo on ur local machine
@@ -22,7 +22,7 @@ library(httr)
 library(tools)
 
 NAME <- 'Biiko'  # 'Balou', 'Christian'
-STORE_ID <- rawToChar(packBits(as.raw(jsonlite::fromJSON('419.json')), 'raw'))
+STORE_ID <- 'np94z'
 
 message('Run chatrInit() 2 start chatting with your peers.')
 

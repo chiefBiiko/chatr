@@ -15,7 +15,7 @@ library(jsonlite)
 library(notifier)
 library(beepr)
 
-STORE_ID <- rawToChar(packBits(as.raw(jsonlite::fromJSON('419.json')), 'raw'))
+STORE_ID <- 'np94z'
 chatrbase <- list()
 
 # Gets a remote store and prints new messages to stdout pipe
