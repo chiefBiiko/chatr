@@ -5,7 +5,7 @@
 #
 # Usage:
 #   Get this repo on ur local machine
-#   Update the NAME variable below with ur name
+#   Update the NAME variable in chatr.R and chatr_background.R with ur name
 #   setwd('PATH_2_chatr_DIRECTORY')  # u can change dir once u have run chatrInit()
 #   source('chatr.R')
 #   chatrInit()  # start a background script that auto-pushes new msgs 2 ur console

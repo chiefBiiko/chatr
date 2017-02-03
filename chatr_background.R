@@ -15,7 +15,7 @@ library(jsonlite)
 library(notifier)
 library(beepr)
 
-NAME = 'Biiko'
+NAME = 'Biiko'  # 'Balou', 'Christian'
 STORE_ID <- 'np94z'
 chatrbase <- list()
 
