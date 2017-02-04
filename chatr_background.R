@@ -3,8 +3,7 @@
 # 4 R & notifications c: github.com/gaborcsardi/notifier
 if (paste0(Sys.info()[1:2], collapse='') == 'Windows7' && !file.exists('notifu/notifu.exe')) {
   message('Installing notifu.')  # if u r !using windows 7 check notifier repo 4 requirements
-  temp <- tempfile()
-  download.file('https://www.paralint.com/projects/notifu/dl/notifu-1.6.zip', temp)
+  download.file('https://www.paralint.com/projects/notifu/dl/notifu-1.6.zip', temp <- tempfile())
   unzip(temp, exdir='notifu')
   unlink(temp)
 }
@@ -15,7 +14,7 @@ library(jsonlite)
 library(notifier)
 library(beepr)
 
-NAME = 'Biiko'  # 'Balou', 'Christian'
+NAME <- 'Biiko'  # 'Balou', 'Christian'
 STORE_ID <- 'np94z'
 chatrbase <- list()
 
