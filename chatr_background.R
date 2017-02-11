@@ -20,7 +20,7 @@ chatrbase <- list()
 
 # Gets a remote store and prints new messages to stdout pipe
 bgGET <- function(name=NAME, store_id=STORE_ID) {
-  stopifnot(nchar(store_id) > 0)
+  stopifnot(nchar(name) > 0, nchar(store_id) > 0)
   chatrpast <- chatrbase
   chatrbase <<- jsonlite::fromJSON(paste0('http://api.myjson.com/bins/', store_id))$msgs
   new_msgs <- setdiff(chatrbase, chatrpast)
