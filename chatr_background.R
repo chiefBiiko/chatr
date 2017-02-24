@@ -7,12 +7,8 @@ if (paste0(Sys.info()[1:2], collapse='') == 'Windows7' && !file.exists('notifu/n
   unzip(temp, exdir='notifu')
   unlink(temp)
 }
-if (!'notifier' %in% installed.packages()) source('https://install-github.me/gaborcsardi/notifier')
-if (!'beepr' %in% installed.packages()) devtools::install_github('rasmusab/beepr') 
-
-library(jsonlite)
-library(notifier)
-library(beepr)
+if (!'notifier' %in% .packages(T)) source('https://install-github.me/gaborcsardi/notifier')
+if (!'beepr' %in% .packages(T)) devtools::install_github('rasmusab/beepr') 
 
 NAME <- 'Biiko'  # 'Balou', 'Christian'
 STORE_ID <- 'np94z'

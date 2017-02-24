@@ -13,7 +13,7 @@
 #   chatrKill()  # stop background R process before exiting ur R session!
 
 lapply(list('devtools', 'sys', 'jsonlite', 'httr', 'tools'), function(p) {
-  if (!p %in% installed.packages()) install.packages(p)
+  if (!p %in% .packages(T)) install.packages(p)
 })
 
 CHATR <- list()
