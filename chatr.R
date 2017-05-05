@@ -12,12 +12,14 @@
 #   chatr('hi')  # send a msg 2 ur peers via the remote store
 #   chatrKill()  # stop background R process before exiting ur R session!
 
+# setup
 packs <- .packages(TRUE)
-
 lapply(list('devtools', 'sys', 'jsonlite', 'httr', 'tools'), function(p) {
   if (!p %in% packs) install.packages(p)
 })
+rm(packs)  # sweep
 
+# global
 CHATR <- list()
 CHATR$NAME <- 'Biiko'  # 'Balou', 'Christian'
 CHATR$STORE_ID <- 'np94z'
@@ -39,14 +41,15 @@ chatrInit <- function(name=CHATR$NAME, store_id=CHATR$STORE_ID) {
        as.integer(names(cbase$msgs)[length(cbase$msgs) - 1L])) > 21600L) {  # 6h
     cbase$msgs <- cbase$msgs[length(cbase$msgs)]
   }
-  res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), 
-                   body=cbase, encode='json')
-  if (res$status_code == 200L) message('Logged in.')
+  re <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), 
+                  body=cbase, encode='json')
+  if (re$status_code == 200L) message('Logged in.') else stop(re$status_code)
   CHATR$PID <<- sys::exec_background(cmd='Rscript', args='chatr_background.R', 
                                      std_out=TRUE, std_err=TRUE)
   message(paste0('Started background R process with PID ', CHATR$PID))
   message('Online: ', paste0(names(which(unlist(cbase$hash))), collapse=', '), 
           '\nRun chatr("ur msg") 2 chat.')
+  return(invisible(0L))
 }
 
 # Kills background R process and logs out
@@ -58,9 +61,10 @@ chatrKill <- function(pid=CHATR$PID, name=CHATR$NAME, store_id=CHATR$STORE_ID) {
   xbase$msgs[[as.character(as.integer(Sys.time()))]] <- 
     paste(format(Sys.time(), tz='UTC', '%d %b %H:%M'), 'UTC |', 
           tools::toTitleCase(name), 'logged out.')
-  res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), 
-                   body=xbase, encode='json')
-  if (res$status_code == 200L) message('Logged out.')
+  re <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), 
+                  body=xbase, encode='json')
+  if (re$status_code == 200L) message('Logged out.') else stop(re$status_code)
+  return(invisible(0L))
 }
 
 # Prepares and launches a PUT operation aka 'the chatting function'
@@ -70,7 +74,8 @@ chatr <- function(msg, name=CHATR$NAME, store_id=CHATR$STORE_ID) {
   pbase$msgs[[as.character(as.integer(Sys.time()))]] <- 
     paste(format(Sys.time(), tz='UTC', '%d %b %H:%M'), 'UTC |', 
           tools::toTitleCase(name), ':', msg)
-  res <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), 
-                   body=pbase, encode='json')
-  if (res$status_code != 200L) message(res$status_code)
+  re <- httr::PUT(paste0('http://api.myjson.com/bins/', store_id), 
+                  body=pbase, encode='json')
+  if (re$status_code != 200L) stop(re$status_code)
+  return(invisible(0L))
 }
